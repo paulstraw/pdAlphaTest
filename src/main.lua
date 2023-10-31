@@ -4,31 +4,12 @@ import "CoreLibs/sprites"
 
 import "util"
 
-import "Level"
 import "Player"
 
 local gfx <const> = playdate.graphics
 
-local level = Level({
-	01, 02, 03, 04, 05, 06, 07, 08, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00, 00, 00, 05, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-	00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-}, 25)
 
 local player = Player(200, 120)
-player:setLevel(level)
 
 -- Just here to control px-perfect player speed
 playdate.display.setRefreshRate(20)
@@ -36,12 +17,33 @@ playdate.display.setRefreshRate(20)
 gfx.clear(gfx.kColorBlack)
 gfx.setBackgroundColor(gfx.kColorBlack)
 
+local tileImages <const> = gfx.imagetable.new('img/tiles')
+
+-- Sprites for alpha collision test
+local spr1 <const> = gfx.sprite.new(tileImages:getImage(1))
+spr1:setCollideRect(0, 0, spr1:getSize())
+spr1:moveTo(170, 120)
+spr1:add()
+local spr5 <const> = gfx.sprite.new(tileImages:getImage(5))
+spr5:setCollideRect(0, 0, spr5:getSize())
+spr5:moveTo(230, 120)
+spr5:add()
+
+-- Sprites for collision count test
+local cc1Spr5 <const> = gfx.sprite.new(tileImages:getImage(5))
+cc1Spr5:setCollideRect(0, 0, cc1Spr5:getSize())
+cc1Spr5:moveTo(180, 60)
+cc1Spr5:add()
+local cc2Spr5 <const> = gfx.sprite.new(tileImages:getImage(5))
+cc2Spr5:setCollideRect(0, 0, cc2Spr5:getSize())
+cc2Spr5:moveTo(220, 60)
+cc2Spr5:add()
+
 function playdate.update()
 	player:setAngle(playdate.getCrankPosition())
 	player:update()
 
 	gfx.sprite.update()
-	level:update()
 
 	playdate.drawFPS(382, 225)
 end
