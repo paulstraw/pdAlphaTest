@@ -10,7 +10,10 @@ function Level:init(levelData, width)
 	map:setImageTable(tileImages)
 	map:setTiles(levelData, width)
 
+	gfx.sprite.addWallSprites(map, {})
+
 	self.map = map
+	self.imagetable = tileImages
 end
 
 function Level:update()
