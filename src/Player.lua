@@ -105,7 +105,7 @@ function Player:_checkAlphaCollision(collision)
 	hitTilePos.y -= cNormal.y * (halfSpriteSize + halfTileSize)
 
 	-- Get position in tilemap (1 indexing)
-	local tileX = mathCeil(hitTilePos .x/ tileSize)
+	local tileX = mathCeil(hitTilePos.x / tileSize)
 	local tileY = mathCeil(hitTilePos.y / tileSize)
 
 	-- Check two neighbors perpendicular to normal to help with corner detection
