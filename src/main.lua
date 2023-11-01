@@ -11,8 +11,7 @@ local gfx <const> = playdate.graphics
 
 local player = Player(200, 120)
 
--- Just here to control px-perfect player speed
-playdate.display.setRefreshRate(20)
+playdate.display.setRefreshRate(50)
 
 gfx.clear(gfx.kColorBlack)
 gfx.setBackgroundColor(gfx.kColorBlack)

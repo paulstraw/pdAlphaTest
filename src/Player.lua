@@ -5,9 +5,11 @@ local gfx <const> = playdate.graphics
 local roundToNearest <const> = util.roundToNearest
 local debugDraw <const> = util.debugDraw
 local mathCeil <const> = math.ceil
+local mathFloor <const> = math.floor
 
 local playerImages <const> = gfx.imagetable.new('img/player')
-local speed <const> = 1
+local speed <const> = 0.1
+local runSpeedMultiplier <const> = 10
 local halfSpriteSize <const> = 16
 local tileSize <const> = 16
 local halfTileSize <const> = tileSize * 0.5
@@ -16,8 +18,12 @@ function Player:init(startX, startY)
 	self.x = startX
 	self.y = startY
 	self.angle = 0
-	self.moveX = 0
-	self.moveY = 0
+
+	self.isUpDown = false
+	self.isRightDown = false
+	self.isDownDown = false
+	self.isLeftDown = false
+	self.isBDown = false
 
 	self:_initSprite()
 	self:_initInput()
@@ -45,10 +51,21 @@ function Player:setAngle(newAngle)
 end
 
 function Player:update()
-	self.x += self.moveX * speed
-	self.y += self.moveY * speed
+	local moveX = self.isRightDown and speed or self.isLeftDown and -speed or 0
+	local moveY = self.isDownDown and speed or self.isUpDown and -speed or 0
 
-	self.sprite:moveTo(self.x, self.y)
+	if self.isBDown then
+		moveX *= runSpeedMultiplier
+		moveY *= runSpeedMultiplier
+	end
+
+	self.x += moveX
+	self.y += moveY
+
+	self.sprite:moveTo(
+		mathFloor(self.x),
+		mathFloor(self.y)
+	)
 
 	self:_updateCollision()
 end
@@ -94,35 +111,43 @@ end
 function Player:_initInput()
 	playdate.inputHandlers.push({
 		upButtonDown = function()
-			self.moveY -= 1
+			self.isUpDown = true
 		end,
 
 		upButtonUp = function()
-			self.moveY += 1
+			self.isUpDown = false
 		end,
 
 		rightButtonDown = function()
-			self.moveX += 1
+			self.isRightDown = true
 		end,
 
 		rightButtonUp = function()
-			self.moveX -= 1
+			self.isRightDown = false
 		end,
 
 		downButtonDown = function()
-			self.moveY += 1
+			self.isDownDown = true
 		end,
 
 		downButtonUp = function()
-			self.moveY -= 1
+			self.isDownDown = false
 		end,
 
 		leftButtonDown = function()
-			self.moveX -= 1
+			self.isLeftDown = true
 		end,
 
 		leftButtonUp = function()
-			self.moveX += 1
+			self.isLeftDown = false
+		end,
+
+		BButtonDown = function()
+			self.isBDown = true
+		end,
+
+		BButtonUp = function()
+			self.isBDown = false
 		end,
 	})
 end
