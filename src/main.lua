@@ -39,7 +39,21 @@ cc2Spr5:moveTo(220, 60)
 cc2Spr5:add()
 
 function playdate.update()
-	player:setAngle(playdate.getCrankPosition())
+	local crankAngle = playdate.getCrankPosition()
+
+	util.debugDraw(function()
+		gfx.pushContext()
+		gfx.setImageDrawMode(gfx.kDrawModeFillWhite)
+		gfx.drawTextAligned(
+			"crankAngle: " .. math.floor(crankAngle),
+			0,
+			0,
+			kTextAlignment.left
+		)
+		gfx.popContext()
+	end)
+
+	player:setAngle(crankAngle)
 	player:update()
 
 	gfx.sprite.update()

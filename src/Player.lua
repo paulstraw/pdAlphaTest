@@ -8,8 +8,8 @@ local mathCeil <const> = math.ceil
 local mathFloor <const> = math.floor
 
 local playerImages <const> = gfx.imagetable.new('img/player')
-local speed <const> = 0.1
-local runSpeedMultiplier <const> = 10
+local speed <const> = 0.2
+local runSpeedMultiplier <const> = 5
 local halfSpriteSize <const> = 16
 local tileSize <const> = 16
 local halfTileSize <const> = tileSize * 0.5
