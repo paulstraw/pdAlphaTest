@@ -35,6 +35,7 @@ function Player:_initSprite()
 	sprite:moveTo(self.x, self.y)
 
 	sprite:setCollideRect(0, 0, sprite:getSize())
+	sprite.collisionResponse = gfx.sprite.kCollisionTypeOverlap
 
 	self.sprite = sprite
 end
